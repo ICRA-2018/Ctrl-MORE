@@ -2,17 +2,41 @@ name: ctrl-more
 
 base:
   ubuntu: 16.04
+  ros: kinetic-ros-base
 
-build: cmake
+# build: cmake
 
-cmake_options: -DCMAKE_PREFIX_PATH=/usr/lib/x86_64-linux-gnu/pkgconfig
+cmake_options: -DCMAKE_PREFIX_PATH=/usr/lib/x86_64-linux-gnu/
 
 apt:
   - libeigen3-dev
   - liborocos-kdl-dev
-  
+  - libmatio-dev
+  - libyaml-cpp-dev
+  - ros-kinetic-orocos-kdl
+  - ros-kinetic-eigen-conversions
+  - liburdfdom-model0.4
+  - liburdfdom-world0.4
+  - ros-kinetic-kdl-parser
+  - ros-kinetic-urdf
+  - libpcl-surface1.7
+  - libpcl-filters1.7
+  - libpcl-common1.7
+ 
 source:
   - name: libxcm
     repo: https://github.com/oyranos-cms/libxcm.git
     build: cmake
     cmake_options: -DCMAKE_INSTALL_PREFIX:PATH=/usr
+  - name: YCM
+    repo: https://github.com/robotology/ycm.git
+    build: cmake
+  - name: spdlog
+    repo: -b master https://github.com/gabime/spdlog.git
+    build: cmake
+
+custom:
+  - ln /usr/lib/x86_64-linux-gnu/cmake/xcm/XcmConfig.cmake /usr/lib/x86_64-linux-gnu/cmake/xcm/XCMConfig.cmake
+  - apt-get update && apt-get install -yq --no-install-recommends wget && apt-get clean && rm -rf /var/lib/apt/lists/*
+  - wget https://github.com/ADVRHumanoids/XBotControl/releases/download/v1.0.1/XBotControl_1.0-1.deb && dpkg -i XBotControl_1.0-1.deb && rm XBotControl_1.0-1.deb
+
